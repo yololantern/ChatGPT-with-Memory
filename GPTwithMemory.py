@@ -16,10 +16,10 @@ def chat_with_gpt(messages):
         model="gpt-3.5-turbo",
         messages=messages
     )
-    
-    print(response.choices[0].message.content)
+    resp = response.choices[0].message.content
+    print(f'\nAI: {resp}')
     print("\n -+-+-+-+-+- \n")
-    return response.choices[0].message.content
+    return resp
 
 # Start the chat loop
 messages = [{"role": "system", "content": "You can start chatting by saying 'Hello'."}]
@@ -27,6 +27,7 @@ messages = [{"role": "system", "content": "You can start chatting by saying 'Hel
 while True:
     user_input = input("User: ")
     messages.append({"role": "user", "content": user_input})
+    
     messages.append({"role": "system", "content": chat_with_gpt(messages)})
 
     # chat_with_gpt(messages)
