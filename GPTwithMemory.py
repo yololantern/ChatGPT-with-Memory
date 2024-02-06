@@ -1,7 +1,12 @@
 from openai import OpenAI
-
+try:
+    with open('key.txt', 'r') as r:
+        key = r.read().rstrip('\n')
+except:
+    print("Error: You need to put your API key in a file named 'key.txt'.")
+    exit()
 # Set up your OpenAI API credentials
-client = OpenAI(api_key =YOUR_API_KEY)
+client = OpenAI(api_key = key)
 
 # Arb comment line
 
