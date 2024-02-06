@@ -1,31 +1,43 @@
 from openai import OpenAI
 
-# Set up your OpenAI API credentials
-client = OpenAI(api_key =YOUR_API_KEY)
+# reads your API key from key.txt
+try:
+    with open('key.txt', 'r') as r:
+        key = r.read().rstrip('\n')
+except:
+    print("Error: You need to put your API key in a file named 'key.txt'.")
+    exit()
 
-# Arb comment line
+# Set up your OpenAI API credentials
+client = OpenAI(api_key = key)
 
 def chat_with_gpt(messages):
-    # userinput = input('What is your question? ')
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=messages
     )
-    
-    print(response.choices[0].message.content)
+    resp = response.choices[0].message.content
+    print(f'\nAI: {resp}')
     print("\n -+-+-+-+-+- \n")
-    return response.choices[0].message.content
+    return resp
 
-# Start the chat loop
-messages = [{"role": "system", "content": "You can start chatting by saying 'Hello'."}]
+def main():
 
-while True:
-    user_input = input("User: ")
-    messages.append({"role": "user", "content": user_input})
-    messages.append({"role": "system", "content": chat_with_gpt(messages)})
+    # Start the chat loop
+    messages = [{"role": "system", "content": "You can start chatting by saying 'Hello'."}]
 
-    # chat_with_gpt(messages)
+    while True:
+        user_input = input("User: ")
 
-    # Stop the loop if the user says goodbye
-    if user_input.lower() == 'goodbye':
-        break
+        # keeps your prompts in context memory
+        messages.append({"role": "user", "content": user_input})
+    
+        # keeps AI response in context memory
+        messages.append({"role": "system", "content": chat_with_gpt(messages)})
+
+        # Stop the loop if the user says goodbye
+        if user_input.lower() == 'goodbye':
+            break
+
+if __name__ == '__main__':
+    main()
