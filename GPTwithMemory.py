@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-file = open("HarryPotter.txt","r")
+file = open("pretext.txt","r")
 
 file_content = file.read()
 
