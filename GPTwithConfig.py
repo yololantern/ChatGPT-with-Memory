@@ -1,4 +1,30 @@
 from openai import OpenAI
+import json
+
+# Function to read the configuration file
+def read_config(config_path):
+    with open(config_path, 'r') as file:
+        return json.load(file)
+
+# Load the configuration
+config = read_config('config.json')
+
+def select_option(options, prompt):
+    print(prompt)
+    for idx, option in enumerate(options, start=1):
+        print(f"{idx}. {option}")
+    choice = int(input("Enter your choice: "))
+    return options[choice - 1]
+
+# Select GPT model and prompt
+selected_model = select_option(config['models'], "Select a GPT model:")
+prompt_options = config['prompts']
+selected_prompt_id = select_option(prompt_options, "Select a prompt or 'Manual Input':")
+
+if selected_prompt_id == "Manual Input":
+    selected_prompt = input("Enter your prompt: ")
+else:
+    selected_prompt = selected_prompt_id
 
 def read_api_key(filepath):
     try:
@@ -22,7 +48,7 @@ def append_conversation_to_file(filepath, user_text, ai_text):
 
 def chat_with_gpt(client, messages):
     response = client.chat.completions.create(
-        model="gpt-4-turbo-preview",
+        model=selected_model,
         messages=messages
     )
     resp_content = response.choices[0].message.content
@@ -34,7 +60,7 @@ def main():
     client = OpenAI(api_key=key)
     file_content = read_pretext("pretext.txt")
     
-    messages = [{"role": "system", "content": f"You are a helpful AI assistant. You are a Python teacher. Review {file_content}"}]
+    messages = [{"role": "system", "content": f"{selected_prompt}. Review {file_content}"}]
     
     while True:
         user_input = input("User: ")
