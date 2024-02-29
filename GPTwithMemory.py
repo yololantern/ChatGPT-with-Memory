@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from openai import OpenAI
 
 file = open("pretext.txt","r")
@@ -20,7 +22,7 @@ conversation_file = open("conversation.txt", "a")
 
 def chat_with_gpt(messages):
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4-turbo-preview",
         messages=messages
     )
     resp = response.choices[0].message.content
