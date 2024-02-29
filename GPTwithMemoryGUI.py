@@ -8,7 +8,7 @@ class ChatApp:
         self.root = root
         self.setup_ui()
         self.client = self.setup_openai_client()
-        self.messages = []
+        self.messages = [{"role": "system", "content": f"You are a helpful AI assistant. Review the information in {self.read_pretext()}."}]
 
     def setup_ui(self):
         self.root.title("Chat with GPT")
@@ -67,6 +67,12 @@ class ChatApp:
             self.progressbar.start(10)
         else:
             self.progressbar.stop()
+
+    def read_pretext(self):
+        with open('pretext.txt' ,'r') as f:
+            return f.read()
+
+            
 
 if __name__ == '__main__':
     root = tk.Tk()
